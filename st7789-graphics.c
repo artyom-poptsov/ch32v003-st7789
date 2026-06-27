@@ -265,4 +265,37 @@ void st7789_draw_line(st7789_t* this, st7789_line_t line) {
         }
 }
 
+/**
+ * Draw a 1-bit image.
+ *
+ * This procedure uses the bitmap drawing algorithm taken from the
+ * Arduino GFX library, with some slight modifications:
+ *   <https://github.com/moononournation/Arduino_GFX>
+ *
+ * @param this An ST7789 display instance.
+ * @param bitmap A bitmap instance.
+ */
+void st7789_draw_bitmap(st7789_t* this, st7789_bitmap_t* bitmap) {
+        uint16_t scanline = (bitmap->size.width + 7) / 8;
+        uint16_t x = bitmap->position.x;
+        uint16_t y = bitmap->position.y;
+        uint8_t byte = 0;
+        uint16_t index = 0;
+        for (int row = 0; row < bitmap->size.height; row++, y++) {
+                for (int column = 0; column < bitmap->size.width; column++) {
+                        if (column & 0b111) {
+                                byte <<= 1;
+                        } else {
+                                index = (row * scanline) + (column / 8);
+                                byte = bitmap->data[index];
+                        }
+
+                        if (byte & (1 << 7)) {
+                                st7789_draw_pixel(this, x + column, y,
+                                        bitmap->color);
+                        }
+                }
+        }
+}
+
 /* st7789-graphics.c ends here. */

@@ -51,6 +51,31 @@ typedef struct {
         uint16_t color;
 } st7789_line_t;
 
+/**
+ * This structure describes an 1-bit image (bitmap.)
+ */
+typedef struct {
+        /**
+         * Position of the image.
+         */
+        st7789_point_t position;
+        
+        /**
+         * Size of the image.
+         */
+        st7789_dimension_t size;
+
+        /**
+         * A color to draw pixels with.
+         */
+        uint16_t color;
+
+        /**
+         * A pointer to the image data.
+         */
+        uint8_t* data;
+} st7789_bitmap_t;
+
 /* Low-level graphic primitives. */
 
 void st7789_draw_pixel(st7789_t* this, uint16_t x, uint16_t y, uint16_t color);
@@ -68,6 +93,7 @@ void st7789_draw_rectangle_ptr(st7789_t* this, const st7789_rectangle_t* rect);
 void st7789_draw_filled_rectangle(st7789_t* this, st7789_rectangle_t rect);
 void st7789_draw_filled_rectangle_ptr(st7789_t* this,
                                       const st7789_rectangle_t* rect);
+void st7789_draw_bitmap(st7789_t* this, st7789_bitmap_t* bitmap);
 
 #endif /* ifndef __ST7789_GRAPHICS_H__ */
 
