@@ -33,8 +33,6 @@
  * @param color 16-bit color.
  */
 void st7789_draw_pixel(st7789_t* this, uint16_t x, uint16_t y, uint16_t color) {
-        x += this->offset.x;
-        y += this->offset.y;
         st7789_window_set(this, x, y, x, y);
         st7789_send_data_16(this, color);
 }
@@ -50,8 +48,6 @@ void st7789_draw_pixel(st7789_t* this, uint16_t x, uint16_t y, uint16_t color) {
  */
 void st7789_draw_vertical_line(st7789_t* this, uint16_t x, uint16_t y,
         uint16_t height, uint16_t color) {
-        x += this->offset.x;
-        y += this->offset.y;
         this->buffer[0] = color >> 8;
         this->buffer[1] = color;
         st7789_window_set(this, x, y, x, y + height - 1);
@@ -69,8 +65,6 @@ void st7789_draw_vertical_line(st7789_t* this, uint16_t x, uint16_t y,
  */
 void st7789_draw_horizontal_line(st7789_t* this, uint16_t x, uint16_t y,
         uint16_t width, uint16_t color) {
-        x += this->offset.x;
-        y += this->offset.y;
         this->buffer[0] = color >> 8;
         this->buffer[1] = color;
         st7789_window_set(this, x, y, x + width - 1, y);
@@ -126,8 +120,8 @@ void st7789_draw_rectangle(st7789_t* this, const st7789_rectangle_t rect) {
  */
 void st7789_draw_filled_rectangle_ptr(st7789_t* this,
         const st7789_rectangle_t* rect) {
-        uint16_t x = rect->position.x + this->offset.x;
-        uint16_t y = rect->position.y + this->offset.y;
+        uint16_t x = rect->position.x;
+        uint16_t y = rect->position.y;
         uint16_t width = rect->size.width;
         uint16_t height = rect->size.height;
 

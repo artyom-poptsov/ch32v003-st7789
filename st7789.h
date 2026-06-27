@@ -110,7 +110,6 @@ typedef struct {
 typedef struct {
         st7789_spi_t spi;
         st7789_dimension_t size;
-        st7789_point_t offset;
         st7789_point_t cursor;
         st7789_color_t foreground_color;
         st7789_color_t background_color;
