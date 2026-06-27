@@ -148,7 +148,7 @@ void st7789_draw_filled_rectangle(st7789_t* this, st7789_rectangle_t rect) {
 void st7789_draw_screen(st7789_t* this, uint16_t color) {
         st7789_rectangle_t full_screen_rect = {
             .position = {.x = 0, .y = 0}, .size = this->size, .color = color };
-        st7789_draw_filled_rectangle(this, full_screen_rect);
+        st7789_draw_filled_rectangle_ptr(this, &full_screen_rect);
 }
 
 /**
