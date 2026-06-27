@@ -340,7 +340,7 @@ void st7789_init(st7789_t* this) {
         st7789_reset(this);
         st7789_command_slpout(this);
         st7789_command_colmod(this, ST7789_COLOR_MODE_16_BPP);
-        st7789_command_madctl(this, ST7789_MADCTL_MX | ST7789_MADCTL_RGB);
+        st7789_command_madctl(this, ST7789_MADCTL_RGB);
         st7789_command_invoff(this);
         st7789_command_dispon(this);
 }
