@@ -111,16 +111,7 @@ void st7789_draw_rectangle_ptr(st7789_t* this, const st7789_rectangle_t* rect) {
  * @param rect A rectangle instance.
  */
 void st7789_draw_rectangle(st7789_t* this, const st7789_rectangle_t rect) {
-        st7789_draw_horizontal_line(this, rect.position.x, rect.position.y,
-                rect.size.width, rect.color);
-        st7789_draw_horizontal_line(this, rect.position.x,
-                rect.position.y + rect.size.height - 1,
-                rect.size.width, rect.color);
-        st7789_draw_vertical_line(this, rect.position.x, rect.position.y,
-                rect.size.height, rect.color);
-        st7789_draw_vertical_line(this, rect.position.x + rect.size.width - 1,
-                rect.position.y, rect.size.height,
-                rect.color);
+        st7789_draw_rectangle_ptr(this, &rect);
 }
 
 /**
@@ -157,19 +148,7 @@ void st7789_draw_filled_rectangle_ptr(st7789_t* this,
  * @param rect A rectangle instance.
  */
 void st7789_draw_filled_rectangle(st7789_t* this, st7789_rectangle_t rect) {
-        uint16_t x = rect.position.x + this->offset.x;
-        uint16_t y = rect.position.y + this->offset.y;
-        uint16_t width = rect.size.width;
-        uint16_t height = rect.size.height;
-
-        uint16_t size = 0;
-        for (uint16_t x = 0; x < width; x++) {
-                this->buffer[size++] = rect.color >> 8;
-                this->buffer[size++] = rect.color;
-        }
-
-        st7789_window_set(this, x, y, x + width - 1, y + height - 1);
-        st7789_spi_send_dma(this, size, height);
+        st7789_draw_filled_rectangle_ptr(this, &rect);
 }
 
 void st7789_draw_screen(st7789_t* this, uint16_t color) {
