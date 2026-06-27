@@ -96,10 +96,13 @@ void st7789_draw_filled_rectangle(st7789_t* this, st7789_rectangle_t rect);
 void st7789_draw_filled_rectangle_ptr(st7789_t* this,
                                       const st7789_rectangle_t* rect);
 void st7789_draw_bitmap(st7789_t* this, st7789_bitmap_t* bitmap);
+
+#ifdef ST7789_FONTS_ENABLED
 void st7789_draw_char(st7789_t* this, char c,
         const st7789_font_t* font);
 void st7789_draw_text(st7789_t* this, const char *str,
         const st7789_font_t* font);
+#endif
 
 #endif /* ifndef __ST7789_GRAPHICS_H__ */
 

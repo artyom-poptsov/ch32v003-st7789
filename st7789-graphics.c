@@ -155,14 +155,14 @@ void st7789_draw_screen(st7789_t* this, uint16_t color) {
 /**
  * Calculate the difference between two 16-bit unsigned numbers.
  */
-static uint16_t diff_uint16(uint16_t a, uint16_t b) {
+uint16_t diff_uint16(uint16_t a, uint16_t b) {
         return ((a > b) ? (a - b) : (b - a));
 }
 
 /**
  * Swap two 16-bit values.
  */
-static void swap_uint16(uint16_t* a, uint16_t* b) {
+void swap_uint16(uint16_t* a, uint16_t* b) {
         uint16_t temp = *a;
         *a = *b;
         *b = temp;
@@ -178,7 +178,7 @@ static void swap_uint16(uint16_t* a, uint16_t* b) {
  * @param this An ST7789 display instance.
  * @param rect A line instance.
  */
-static void draw_line_bresenham(st7789_t* this, st7789_line_t line) {
+void draw_line_bresenham(st7789_t* this, st7789_line_t line) {
         uint16_t dy = diff_uint16(line.end.y, line.start.y);
         uint16_t dx = diff_uint16(line.end.x, line.start.x);
         uint8_t steep = dy > dx;
@@ -272,6 +272,8 @@ void st7789_draw_bitmap(st7789_t* this, st7789_bitmap_t* bitmap) {
         }
 }
 
+#ifdef ST7789_FONTS_ENABLED
+
 /**
  * Draw a char on the display.
  *
@@ -364,5 +366,7 @@ void st7789_draw_text(st7789_t* this, const char *str,
                 }
 	}
 }
+
+#endif
 
 /* st7789-graphics.c ends here. */

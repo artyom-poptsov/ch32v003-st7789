@@ -22,6 +22,8 @@
 #ifndef __ST7789_FONTS_H__
 #define __ST7789_FONTS_H__
 
+#ifdef ST7789_FONTS_ENABLED
+
 #include <stdint.h>
 
 typedef struct {
@@ -30,8 +32,18 @@ typedef struct {
 	const uint16_t* data; /*!< Pointer to data font data array */
 } st7789_font_t;
 
+#ifdef ST7789_FONT_7X10_ENABLED
 extern const st7789_font_t ST7789_FONT_7X10;
+#endif
+
+#ifdef ST7789_FONT_11X18_ENABLED
 extern const st7789_font_t ST7789_FONT_11X18;
+#endif
+
+#ifdef ST7789_FONT_16X26_ENABLED
 extern const st7789_font_t ST7789_FONT_16X26;
+#endif
+
+#endif
 
 #endif /* ifndef __ST7789_FONTS_H__ */
