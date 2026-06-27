@@ -19,6 +19,7 @@
 #include <stdint.h>
 
 #include "st7789-graphics.h"
+#include "st7789-fonts.h"
 
 // ----------------------------------------------------------------------------
 // Low-level graphics. 
@@ -269,6 +270,99 @@ void st7789_draw_bitmap(st7789_t* this, st7789_bitmap_t* bitmap) {
                         }
                 }
         }
+}
+
+/**
+ * Draw a char on the display.
+ *
+ * Based on "ili9341_putc" procedure from
+ *   <https://github.com/AdiHamulic/CH32V003-SPI-DMA---ILI9341>
+ *
+ * @param this An ST7789 display instance.
+ * @param c A character to draw.
+ * @param font A font to use.
+ *
+ * @see ST7789_FONT_7X10
+ * @see ST7789_FONT_11X18
+ * @see ST7789_FONT_16X26
+ */
+void st7789_draw_char(st7789_t* this, char c,
+        const st7789_font_t* font)
+{
+        st7789_color_t fg_color = this->foreground_color;
+        st7789_color_t bg_color = this->background_color;
+        uint32_t data;
+        uint16_t y = 0;
+        uint16_t x = 0;
+
+	if ((this->cursor.x + font->width) > this->size.width) {
+		// If at the end of a line of display, go to new line and
+                // set x to 0 position.
+		this->cursor.y += font->height;
+		this->cursor.x = 0;
+	}
+
+	for (uint16_t row = 0; row < font->height; row++) {
+		data = font->data[((c - 32) * font->height) + row];
+                y = (row * (font->width * 2));
+                x = 0;
+		for (uint16_t column = 0; column < font->width; column++) {
+			if ((data << column) & 0x8000) {
+				this->buffer[y + x] = fg_color >> 8;
+                                this->buffer[y + x + 1] = fg_color & 0xFF;
+			} else {
+				this->buffer[y + x] = bg_color;
+                                this->buffer[y + x + 1] = bg_color & 0xFF;
+			}
+                        x += 2;
+		}
+	}
+
+        this->cursor.x += font->width;
+
+        st7789_window_set(
+                this,
+                this->cursor.x,
+                this->cursor.y,
+                this->cursor.x + font->width - 1,
+                this->cursor.y + font->height - 1);
+        st7789_spi_send_dma(this, (font->width * font->height) * 2, 1);
+}
+
+/**
+ * Draw a string on the display.
+ *
+ * Based on "ili9341_puts" procedure from
+ *   <https://github.com/AdiHamulic/CH32V003-SPI-DMA---ILI9341>
+ *
+ * @param this An ST7789 display instance.
+ * @param str A character string to draw.
+ * @param font A font to use.
+ *
+ * @see st7789_draw_char
+ */
+void st7789_draw_text(st7789_t* this, const char *str,
+        const st7789_font_t* font)
+{
+	uint16_t start_x = this->cursor.x;
+	for (; *str; str++) {
+		//New line
+		if (*str == '\n') {
+			this->cursor.y += font->height + 1;
+			// If after '\n' is also '\r', than go to the left of
+                        // the screen.
+			if (*(str + 1) == '\r') {
+				this->cursor.x = 0;
+				str++;
+			} else {
+				this->cursor.x = start_x;
+			}
+		} else if (*str == '\r') {
+                        continue;
+		} else {
+                        st7789_draw_char(this, *str, font);
+                }
+	}
 }
 
 /* st7789-graphics.c ends here. */

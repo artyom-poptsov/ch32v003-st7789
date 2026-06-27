@@ -20,6 +20,8 @@
 #define __ST7789_GRAPHICS_H__
 
 #include "st7789.h"
+#include "st7789-fonts.h"
+
 #include <stdint.h>
 
 /**
@@ -94,6 +96,10 @@ void st7789_draw_filled_rectangle(st7789_t* this, st7789_rectangle_t rect);
 void st7789_draw_filled_rectangle_ptr(st7789_t* this,
                                       const st7789_rectangle_t* rect);
 void st7789_draw_bitmap(st7789_t* this, st7789_bitmap_t* bitmap);
+void st7789_draw_char(st7789_t* this, char c,
+        const st7789_font_t* font);
+void st7789_draw_text(st7789_t* this, const char *str,
+        const st7789_font_t* font);
 
 #endif /* ifndef __ST7789_GRAPHICS_H__ */
 
